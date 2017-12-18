@@ -31,3 +31,4 @@ void RefreshNum(int buff, int StartX, int StartY)
 	SetConsoleCursorPosition(Handle, XYPosition);
 }
 //ghjgkjhjl
+//jvhvhu uuh gyug uyig ug yu
