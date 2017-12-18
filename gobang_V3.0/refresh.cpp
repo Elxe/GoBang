@@ -30,3 +30,4 @@ void RefreshNum(int buff, int StartX, int StartY)
 	XYPosition.Y = 31;
 	SetConsoleCursorPosition(Handle, XYPosition);
 }
+//ghjgkjhjl
