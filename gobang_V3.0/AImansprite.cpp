@@ -2,10 +2,6 @@
 #include "AImansprite.h"
 //#define DEBUG
 
-typedef struct Chong3Chong4{ int Chong3; int Chong4; int TiaoChong4; } Chong3Chong4;//记录冲三、冲四、跳冲四
-typedef struct Huo2Huo3 { int Huo2; int Huo3; }Huo2Huo3;//记录连二、连三
-typedef struct Tiao2Tiao3 { int Tiao2; int Tiao3; }Tiao2Tiao3;//记录跳二、跳三
-typedef struct XiaoQiXing { int Chong2; int Huo1; int Chong1; }XiaoQiXing;//记录冲二、活一、冲一
 int ChangLian, Lian5, Huo4, Chong4, TiaoChong4, Huo3, Tiao3, Chong3, Huo2, Tiao2, Chong2, Huo1, Chong1;
 //搜索函数，搜索各种棋型
 
@@ -116,14 +112,9 @@ Chong3Chong4 GetChong3Chong4(int BoardPosition[][BOARDSIZE], int Flag, Position 
 		else break;
 	}
 	//冲三，左右对称
-	if (Left1 + Left2 + Right1 >= 2)
+	if (Left1 + Right1 == 2)
 	{	//冲三的情况，两边各有一个对方子挡住的情况
-		if ((SpaceLeft == 0 && Left1 + Right1 == 2 && SpaceRight)|| (SpaceLeft&&Left1 + Right1 == 2 && SpaceRight == 0))
-			ChessNum3.Chong3++;
-	}
-	if (Left1 + Right1 + Right2 >= 2)
-	{	//冲三的情况，两边各有一个对方子挡住的情况
-		if ((SpaceLeft == 0 && Left1 + Right1 == 2 && SpaceRight) || (SpaceLeft&&Left1 + Right1 == 2 && SpaceRight == 0))
+		if ((SpaceLeft == 0 && SpaceRight) || (SpaceLeft && SpaceRight == 0))
 			ChessNum3.Chong3++;
 	}
 	//冲四的情况,左右对称 
@@ -157,14 +148,9 @@ Chong3Chong4 GetChong3Chong4(int BoardPosition[][BOARDSIZE], int Flag, Position 
 		else break;
 	}
 	//冲三，左右对称
-	if (Left1 + Left2 + Right1 >= 2)
+	if (Left1 + Right1 == 2)
 	{	//冲三的情况，两边各有一个对方子挡住的情况
-		if ((SpaceLeft == 0 && Left1 + Right1 == 2 && SpaceRight) || (SpaceLeft&&Left1 + Right1 == 2 && SpaceRight == 0))
-			ChessNum3.Chong3++;
-	}
-	if (Left1 + Right1 + Right2 >= 2)
-	{	//冲三的情况，两边各有一个对方子挡住的情况
-		if ((SpaceLeft == 0 && Left1 + Right1 == 2 && SpaceRight) || (SpaceLeft&&Left1 + Right1 == 2 && SpaceRight == 0))
+		if ((SpaceLeft == 0 && SpaceRight) || (SpaceLeft && SpaceRight == 0))
 			ChessNum3.Chong3++;
 	}
 	//冲四的情况,左右对称 
@@ -198,14 +184,9 @@ Chong3Chong4 GetChong3Chong4(int BoardPosition[][BOARDSIZE], int Flag, Position 
 		else break;
 	}
 	//冲三，左右对称
-	if (Left1 + Left2 + Right1 >= 2)
+	if (Left1 + Right1 == 2)
 	{	//冲三的情况，两边各有一个对方子挡住的情况
-		if ((SpaceLeft == 0 && Left1 + Right1 == 2 && SpaceRight) || (SpaceLeft&&Left1 + Right1 == 2 && SpaceRight == 0))
-			ChessNum3.Chong3++;
-	}
-	if (Left1 + Right1 + Right2 >= 2)
-	{	//冲三的情况，两边各有一个对方子挡住的情况
-		if ((SpaceLeft == 0 && Left1 + Right1 == 2 && SpaceRight) || (SpaceLeft&&Left1 + Right1 == 2 && SpaceRight == 0))
+		if ((SpaceLeft == 0 && SpaceRight) || (SpaceLeft && SpaceRight == 0))
 			ChessNum3.Chong3++;
 	}
 	//冲四的情况,左右对称 
@@ -239,14 +220,9 @@ Chong3Chong4 GetChong3Chong4(int BoardPosition[][BOARDSIZE], int Flag, Position 
 		else break;
 	}
 	//冲三，左右对称
-	if (Left1 + Left2 + Right1 >= 2)
+	if (Left1 +Right1 == 2)
 	{	//冲三的情况，两边各有一个对方子挡住的情况
-		if ((SpaceLeft == 0 && Left1 + Right1 == 2 && SpaceRight) || (SpaceLeft&&Left1 + Right1 == 2 && SpaceRight == 0))
-			ChessNum3.Chong3++;
-	}
-	if (Left1 + Right1 + Right2 >= 2)
-	{	//冲三的情况，两边各有一个对方子挡住的情况
-		if ((SpaceLeft == 0 && Left1 + Right1 == 2 && SpaceRight) || (SpaceLeft&&Left1 + Right1 == 2 && SpaceRight == 0))
+		if ((SpaceLeft == 0 && SpaceRight) || (SpaceLeft && SpaceRight == 0))
 			ChessNum3.Chong3++;
 	}
 	//冲四的情况,左右对称 
@@ -404,16 +380,16 @@ Tiao2Tiao3 GetTiao2Tiao3(int BoardPosition[][BOARDSIZE], int Flag, Position Coor
 
 	//'\'方向
 	SpaceLeft = SpaceRight = Left1 = Left2 = Right1 = Right2 = 0;  //搜索初始化
-	for (j = Coord.Y - 1; j >= 0 && (BoardPosition[Coord.X][j] == Flag || BoardPosition[Coord.X][j] == BLANK) && SpaceLeft<2; j--)
+	for (i = Coord.X - 1, j = Coord.Y - 1;i>=0&&j >= 0 && (BoardPosition[i][j] == Flag || BoardPosition[i][j] == BLANK) && SpaceLeft<2;i--, j--)
 	{
-		if (BoardPosition[Coord.X][j] == BLANK) SpaceLeft++;//遇到空格
-		else if (BoardPosition[Coord.X][j] == Flag) SpaceLeft ? Left2++ : Left1++; //遇到己方棋子
+		if (BoardPosition[i][j] == BLANK) SpaceLeft++;//遇到空格
+		else if (BoardPosition[i][j] == Flag) SpaceLeft ? Left2++ : Left1++; //遇到己方棋子
 		else break;
 	}
-	for (j = Coord.Y + 1; j <BOARDSIZE && (BoardPosition[Coord.X][j] == Flag || BoardPosition[Coord.X][j] == BLANK) && SpaceRight<2; j++)
+	for (i = Coord.X + 1, j = Coord.Y + 1;i<BOARDSIZE&&j <BOARDSIZE && (BoardPosition[i][j] == Flag || BoardPosition[i][j] == BLANK) && SpaceRight<2; i++,j++)
 	{
-		if (BoardPosition[Coord.X][j] == BLANK) SpaceRight++;//遇到空格
-		else if (BoardPosition[Coord.X][j] == Flag) SpaceRight ? Right2++ : Right1++; //遇到己方棋子
+		if (BoardPosition[i][j] == BLANK) SpaceRight++;//遇到空格
+		else if (BoardPosition[i][j] == Flag) SpaceRight ? Right2++ : Right1++; //遇到己方棋子
 		else break;
 	}//跳活二，二子间有一个空格，且周围空格数为4个
 	if ((Left1 + Left2 + Right1 + Right2 == 1 && SpaceLeft == 2 && SpaceRight == 2) && ((Left2 == 1) ^ (Right2 == 1)))

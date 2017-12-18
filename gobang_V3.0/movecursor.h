@@ -2,6 +2,7 @@
 #include"refresh.h"
 #include "define.h"
 #include "displaychessboard.h"
+#include "AImansprite.h"
 
 //专门用来转换光标位置
 void MoveCursor(Position BuffCursor, Position Cursor);

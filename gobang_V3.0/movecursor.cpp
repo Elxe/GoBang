@@ -40,6 +40,21 @@ int Control(Position* Cursor, int BoardPosition[][BOARDSIZE], int Flag)
 			if (Cursor->Y >= BOARDSIZE) Cursor->Y = 0;
 			
 			MoveCursor(BuffCursor, *Cursor);
+			//调试棋型
+			{
+				printf("连五=%d\n", GetLian5(BoardPosition, Flag, *Cursor, Bans));
+				printf("活四=%d\n", GetHuo4(BoardPosition, Flag, *Cursor, Bans));
+				printf("冲四=%d\n", GetChong3Chong4(BoardPosition, Flag, *Cursor, Bans).Chong4);
+				printf("跳冲四=%d\n", GetChong3Chong4(BoardPosition, Flag, *Cursor, Bans).TiaoChong4);
+				printf("活三=%d\n", GetHuo2Huo3(BoardPosition, Flag, *Cursor, Bans).Huo3);
+				printf("冲三=%d\n", GetChong3Chong4(BoardPosition, Flag, *Cursor, Bans).Chong3);
+				printf("跳冲三=%d\n", GetTiao2Tiao3(BoardPosition, Flag, *Cursor, Bans).Tiao3);
+				printf("活二=%d\n", GetHuo2Huo3(BoardPosition, Flag, *Cursor, Bans).Huo2);
+				printf("跳二=%d\n", GetTiao2Tiao3(BoardPosition, Flag, *Cursor, Bans).Tiao2);
+				printf("冲二=%d\n", GetXiaoQiXing(BoardPosition, Flag, *Cursor, Bans).Chong2);
+				printf("活一=%d\n", GetXiaoQiXing(BoardPosition, Flag, *Cursor, Bans).Huo1);
+				printf("冲一=%d\n", GetXiaoQiXing(BoardPosition, Flag, *Cursor, Bans).Chong1);
+			}
 			
 		}
 		else if (Input == 27)  //退出功能
