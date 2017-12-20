@@ -117,19 +117,30 @@ Chong3Chong4 GetChong3Chong4(int BoardPosition[][BOARDSIZE], int Flag, Position 
 		if ((SpaceLeft == 0 && SpaceRight) || (SpaceLeft && SpaceRight == 0))
 			ChessNum3.Chong3++;
 	}
+	//跳冲三，左右对称
+	if (Left1 + Left2 + Right1 == 2)
+	{
+		if (Left2 && ((SpaceLeft == 1 && SpaceRight) || (SpaceLeft == 2 && !SpaceRight)))
+			ChessNum3.Chong3++;
+	}
+	if (Left1 + Right1 + Right2 == 2)
+	{
+		if (Right2 && ((SpaceRight == 1 && SpaceLeft) || (SpaceRight == 2 && !SpaceLeft)))
+			ChessNum3.Chong3++;
+	}
 	//冲四的情况,左右对称 
 	if (Left1 + Left2 + Right1 >= 3)
 	{
-		if (SpaceLeft == 0 && Left1 + Right1 == 2 && SpaceRight)
+		if (Left2 && ((SpaceLeft == 1 && SpaceRight) || (SpaceLeft == 2 && !SpaceRight)))
 			ChessNum3.TiaoChong4++;
-		if (SpaceLeft && Left1 < 3 && Right1 < 3 && Left2)
+		if (SpaceLeft && Left1 + Right1 >= 3 && SpaceRight == 0)
 			ChessNum3.Chong4++;
 	}
 	if (Left1 + Right1 + Right2 >= 3)
 	{
-		if (SpaceRight == 0 && Left1 + Right1 == 2 && SpaceLeft)
+		if (Right2 && ((SpaceRight == 1 && SpaceLeft) || (SpaceRight == 2 && !SpaceLeft)))
 			ChessNum3.TiaoChong4++;
-		if (SpaceRight && Left1 < 3 && Right1 < 3 && Right2)
+		if (SpaceRight && Left1 + Right1 >= 3 && SpaceLeft == 0)
 			ChessNum3.Chong4++;
 	}
 
@@ -153,19 +164,30 @@ Chong3Chong4 GetChong3Chong4(int BoardPosition[][BOARDSIZE], int Flag, Position 
 		if ((SpaceLeft == 0 && SpaceRight) || (SpaceLeft && SpaceRight == 0))
 			ChessNum3.Chong3++;
 	}
+	//跳冲三，左右对称
+	if (Left1 + Left2 + Right1 == 2)
+	{
+		if (Left2 && ((SpaceLeft == 1 && SpaceRight) || (SpaceLeft == 2 && !SpaceRight)))
+			ChessNum3.Chong3++;
+	}
+	if (Left1 + Right1 + Right2 == 2)
+	{
+		if (Right2 && ((SpaceRight == 1 && SpaceLeft) || (SpaceRight == 2 && !SpaceLeft)))
+			ChessNum3.Chong3++;
+	}
 	//冲四的情况,左右对称 
 	if (Left1 + Left2 + Right1 >= 3)
 	{
-		if (SpaceLeft == 0 && Left1 + Right1 == 2 && SpaceRight)
+		if (Left2 && ((SpaceLeft == 1 && SpaceRight) || (SpaceLeft == 2 && !SpaceRight)))
 			ChessNum3.TiaoChong4++;
-		if (SpaceLeft && Left1 < 3 && Right1 < 3 && Left2)
+		if (SpaceLeft && Left1 + Right1 >= 3 && SpaceRight == 0)
 			ChessNum3.Chong4++;
 	}
 	if (Left1 + Right1 + Right2 >= 3)
 	{
-		if (SpaceRight == 0 && Left1 + Right1 == 2 && SpaceLeft)
+		if (Right2 && ((SpaceRight == 1 && SpaceLeft) || (SpaceRight == 2 && !SpaceLeft)))
 			ChessNum3.TiaoChong4++;
-		if (SpaceRight && Left1 < 3 && Right1 < 3 && Right2)
+		if (SpaceRight && Left1 + Right1 >= 3 && SpaceLeft == 0)
 			ChessNum3.Chong4++;
 	}
 
@@ -189,19 +211,30 @@ Chong3Chong4 GetChong3Chong4(int BoardPosition[][BOARDSIZE], int Flag, Position 
 		if ((SpaceLeft == 0 && SpaceRight) || (SpaceLeft && SpaceRight == 0))
 			ChessNum3.Chong3++;
 	}
+	//跳冲三，左右对称
+	if (Left1 + Left2 + Right1 == 2)
+	{
+		if (Left2 && ((SpaceLeft == 1 && SpaceRight) || (SpaceLeft == 2 && !SpaceRight)))
+			ChessNum3.Chong3++;
+	}
+	if (Left1 + Right1 + Right2 == 2)
+	{
+		if (Right2 && ((SpaceRight == 1 && SpaceLeft) || (SpaceRight == 2 && !SpaceLeft)))
+			ChessNum3.Chong3++;
+	}
 	//冲四的情况,左右对称 
 	if (Left1 + Left2 + Right1 >= 3)
 	{
-		if (SpaceLeft == 0 && Left1 + Right1 == 2 && SpaceRight)
+		if (Left2 && ((SpaceLeft == 1 && SpaceRight) || (SpaceLeft == 2 && !SpaceRight)))
 			ChessNum3.TiaoChong4++;
-		if (SpaceLeft && Left1 < 3 && Right1 < 3 && Left2)
+		if (SpaceLeft && Left1 + Right1 >= 3 && SpaceRight == 0)
 			ChessNum3.Chong4++;
 	}
 	if (Left1 + Right1 + Right2 >= 3)
 	{
-		if (SpaceRight == 0 && Left1 + Right1 == 2 && SpaceLeft)
+		if (Right2 && ((SpaceRight == 1 && SpaceLeft) || (SpaceRight == 2 && !SpaceLeft)))
 			ChessNum3.TiaoChong4++;
-		if (SpaceRight && Left1 < 3 && Right1 < 3 && Right2)
+		if (SpaceRight && Left1 + Right1 >= 3 && SpaceLeft == 0)
 			ChessNum3.Chong4++;
 	}
 
@@ -220,24 +253,35 @@ Chong3Chong4 GetChong3Chong4(int BoardPosition[][BOARDSIZE], int Flag, Position 
 		else break;
 	}
 	//冲三，左右对称
-	if (Left1 +Right1 == 2)
+	if (Left1 + Right1 == 2)
 	{	//冲三的情况，两边各有一个对方子挡住的情况
 		if ((SpaceLeft == 0 && SpaceRight) || (SpaceLeft && SpaceRight == 0))
+			ChessNum3.Chong3++;
+	}
+	//跳冲三，左右对称
+	if (Left1 + Left2 + Right1 == 2)
+	{
+		if (Left2 && ((SpaceLeft == 1 && SpaceRight) || (SpaceLeft == 2 && !SpaceRight)))
+			ChessNum3.Chong3++;
+	}
+	if (Left1 + Right1 + Right2 == 2)
+	{
+		if (Right2 && ((SpaceRight == 1 && SpaceLeft) || (SpaceRight == 2 && !SpaceLeft)))
 			ChessNum3.Chong3++;
 	}
 	//冲四的情况,左右对称 
 	if (Left1 + Left2 + Right1 >= 3)
 	{
-		if (SpaceLeft == 0 && Left1 + Right1 == 2 && SpaceRight)
+		if (Left2 && ((SpaceLeft == 1 && SpaceRight) || (SpaceLeft == 2 && !SpaceRight)))
 			ChessNum3.TiaoChong4++;
-		if (SpaceLeft && Left1 < 3 && Right1 < 3 && Left2)
+		if (SpaceLeft && Left1 + Right1 >= 3 && SpaceRight == 0)
 			ChessNum3.Chong4++;
 	}
 	if (Left1 + Right1 + Right2 >= 3)
 	{
-		if (SpaceRight == 0 && Left1 + Right1 == 2 && SpaceLeft)
+		if (Right2 && ((SpaceRight == 1 && SpaceLeft) || (SpaceRight == 2 && !SpaceLeft)))
 			ChessNum3.TiaoChong4++;
-		if (SpaceRight && Left1 < 3 && Right1 < 3 && Right2)
+		if (SpaceRight && Left1 + Right1 >= 3 && SpaceLeft == 0)
 			ChessNum3.Chong4++;
 	}
 	return ChessNum3;
@@ -295,7 +339,7 @@ Huo2Huo3 GetHuo2Huo3(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, i
 	if (Left + Right == 1)
 	{
 		for (SpaceLeft = 0, i = Coord.X - Left - 1, j = Coord.Y - Left - 1;i>=0 && j >= 0 && BoardPosition[i][j] == BLANK; SpaceLeft++,i--,j--);
-		for (SpaceRight = 0, i = Coord.X +Left + 1, j = Coord.Y + Right + 1;i<BOARDSIZE&& j <BOARDSIZE && BoardPosition[i][j] == BLANK; SpaceRight++,i++,j++);
+		for (SpaceRight = 0, i = Coord.X +Right + 1, j = Coord.Y + Right + 1;i<BOARDSIZE&& j <BOARDSIZE && BoardPosition[i][j] == BLANK; SpaceRight++,i++,j++);
 		if (SpaceLeft && SpaceRight && SpaceLeft + SpaceRight >= 4) ChessNum2.Huo2++;
 	}
 	if (Left + Right == 2)
@@ -304,7 +348,7 @@ Huo2Huo3 GetHuo2Huo3(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, i
 			&& !(Coord.X + Left + 2 <BOARDSIZE && Coord.Y + Right + 2 <BOARDSIZE && BoardPosition[Coord.X + Left + 2][Coord.Y + Right + 2] == Flag))
 		{
 			for (SpaceLeft = 0, i = Coord.X - Left - 1, j = Coord.Y - Left - 1; i >= 0 && j >= 0 && BoardPosition[i][j] == BLANK; SpaceLeft++, i--, j--);
-			for (SpaceRight = 0, i = Coord.X + Left + 1, j = Coord.Y + Right + 1; i<BOARDSIZE&& j <BOARDSIZE && BoardPosition[i][j] == BLANK; SpaceRight++, i++, j++);
+			for (SpaceRight = 0, i = Coord.X + Right + 1, j = Coord.Y + Right + 1; i<BOARDSIZE&& j <BOARDSIZE && BoardPosition[i][j] == BLANK; SpaceRight++, i++, j++);
 			if (SpaceLeft && SpaceRight && SpaceLeft + SpaceRight >= 3) ChessNum2.Huo3++;
 		}
 	}
@@ -315,7 +359,7 @@ Huo2Huo3 GetHuo2Huo3(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, i
 	if (Left + Right == 1)
 	{
 		for (SpaceLeft = 0, i = Coord.X + Left + 1, j = Coord.Y - Left - 1; i<BOARDSIZE && j >= 0 && BoardPosition[i][j] == BLANK; SpaceLeft++, i++, j--);
-		for (SpaceRight = 0, i = Coord.X - Left - 1, j = Coord.Y + Right + 1; i >= 0&& j <BOARDSIZE && BoardPosition[i][j] == BLANK; SpaceRight++, i--, j++);
+		for (SpaceRight = 0, i = Coord.X - Right - 1, j = Coord.Y + Right + 1; i >= 0&& j <BOARDSIZE && BoardPosition[i][j] == BLANK; SpaceRight++, i--, j++);
 		if (SpaceLeft && SpaceRight && SpaceLeft + SpaceRight >= 4) ChessNum2.Huo2++;
 	}
 	if (Left + Right == 2)
@@ -324,7 +368,7 @@ Huo2Huo3 GetHuo2Huo3(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, i
 			&& !(Coord.X - Left - 2 >= 0 && Coord.Y + Right + 2 <BOARDSIZE && BoardPosition[Coord.X - Left - 2][Coord.Y + Right + 2] == Flag))
 		{
 			for (SpaceLeft = 0, i = Coord.X + Left + 1, j = Coord.Y - Left - 1; i<BOARDSIZE && j >= 0 && BoardPosition[i][j] == BLANK; SpaceLeft++, i++, j--);
-			for (SpaceRight = 0, i = Coord.X - Left - 1, j = Coord.Y + Right + 1; i >= 0 && j <BOARDSIZE && BoardPosition[i][j] == BLANK; SpaceRight++, i--, j++);
+			for (SpaceRight = 0, i = Coord.X - Right - 1, j = Coord.Y + Right + 1; i >= 0 && j <BOARDSIZE && BoardPosition[i][j] == BLANK; SpaceRight++, i--, j++);
 			if (SpaceLeft && SpaceRight && SpaceLeft + SpaceRight >= 3) ChessNum2.Huo3++;
 		}
 	}
@@ -355,7 +399,7 @@ Tiao2Tiao3 GetTiao2Tiao3(int BoardPosition[][BOARDSIZE], int Flag, Position Coor
 	if ((Left1+Left2+Right1+Right2==1&& SpaceLeft == 2 && SpaceRight == 2)&&((Left2==1)^(Right2==1)))
 		ChessNum1.Tiao2++;
 	if ((Left1 + Left2 + Right1 + Right2 == 2) && ((Left1 == 1) ^ (Right1 == 1))
-		&& (Left2 == 1 && SpaceLeft == 2 && SpaceRight >= 1) && (Right2 == 1 && SpaceLeft >= 1 && SpaceRight == 2))
+		&& ((Left2 == 1 && SpaceLeft == 2 && SpaceRight >= 1) || (Right2 == 1 && SpaceLeft >= 1 && SpaceRight == 2)))
 		ChessNum1.Tiao3++;
 
 	//横轴方向
@@ -375,7 +419,7 @@ Tiao2Tiao3 GetTiao2Tiao3(int BoardPosition[][BOARDSIZE], int Flag, Position Coor
 	if ((Left1 + Left2 + Right1 + Right2 == 1 && SpaceLeft == 2 && SpaceRight == 2) && ((Left2 == 1) ^ (Right2 == 1)))
 		ChessNum1.Tiao2++;
 	if ((Left1 + Left2 + Right1 + Right2 == 2) && ((Left1 == 1) ^ (Right1 == 1))
-		&& (Left2 == 1 && SpaceLeft == 2 && SpaceRight >= 1) && (Right2 == 1 && SpaceLeft >= 1 && SpaceRight == 2))
+		&& ((Left2 == 1 && SpaceLeft == 2 && SpaceRight >= 1) || (Right2 == 1 && SpaceLeft >= 1 && SpaceRight == 2)))
 		ChessNum1.Tiao3++;
 
 	//'\'方向
@@ -395,7 +439,7 @@ Tiao2Tiao3 GetTiao2Tiao3(int BoardPosition[][BOARDSIZE], int Flag, Position Coor
 	if ((Left1 + Left2 + Right1 + Right2 == 1 && SpaceLeft == 2 && SpaceRight == 2) && ((Left2 == 1) ^ (Right2 == 1)))
 		ChessNum1.Tiao2++;
 	if ((Left1 + Left2 + Right1 + Right2 == 2) && ((Left1 == 1) ^ (Right1 == 1))
-		&& (Left2 == 1 && SpaceLeft == 2 && SpaceRight >= 1) && (Right2 == 1 && SpaceLeft >= 1 && SpaceRight == 2))
+		&& ((Left2 == 1 && SpaceLeft == 2 && SpaceRight >= 1) || (Right2 == 1 && SpaceLeft >= 1 && SpaceRight == 2)))
 		ChessNum1.Tiao3++;
 
 	//'/'方向
@@ -415,7 +459,7 @@ Tiao2Tiao3 GetTiao2Tiao3(int BoardPosition[][BOARDSIZE], int Flag, Position Coor
 	if ((Left1 + Left2 + Right1 + Right2 == 1 && SpaceLeft == 2 && SpaceRight == 2) && ((Left2 == 1) ^ (Right2 == 1)))
 		ChessNum1.Tiao2++;
 	if ((Left1 + Left2 + Right1 + Right2 == 2) && ((Left1 == 1) ^ (Right1 == 1))
-		&& (Left2 == 1 && SpaceLeft == 2 && SpaceRight >= 1) && (Right2 == 1 && SpaceLeft >= 1 && SpaceRight == 2))
+		&& ((Left2 == 1 && SpaceLeft == 2 && SpaceRight >= 1) || (Right2 == 1 && SpaceLeft >= 1 && SpaceRight == 2)))
 		ChessNum1.Tiao3++;
 
 	return ChessNum1;
