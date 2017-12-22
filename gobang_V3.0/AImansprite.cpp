@@ -2,8 +2,8 @@
 #include "AImansprite.h"
 //#define DEBUG
 
-int ChangLian, Lian5, Huo4, Chong4, TiaoChong4, Huo3, Tiao3, Chong3, Huo2, Tiao2, Chong2, Huo1, Chong1;
-//搜索函数，搜索各种棋型
+int ChangLian, Lian5, Huo4, Chong4, TiaoChong4, Huo3, Tiao3, Chong3, Huo2, Tiao2, Chong2, Huo1, Chong1;//各种棋型的赋值
+int MinLeft, MaxRight, MinTop, MaxBottom;
 
 //连五函数，用于搜索连五或者长连，连五返回1，长连返回2，无返回0
 int GetLian5(int BoardPosition[][BOARDSIZE], int Flag, Position Coord,int Bans)
@@ -12,6 +12,7 @@ int GetLian5(int BoardPosition[][BOARDSIZE], int Flag, Position Coord,int Bans)
 	//纵轴方向
 	for (Left = 0, i = Coord.X - 1; i >= 0&&BoardPosition[i][Coord.Y]==Flag; Left++, i--);
 	for (Right = 0, i = Coord.X + 1; i <BOARDSIZE&&BoardPosition[i][Coord.Y]==Flag; Right++, i++);
+	//如果落子前有4个子，则落子后为连五；如果落子前有大于或等于5个子，则落子后为长连
 	if (Left + Right == 4)
 		return 1;
 	else if (Left + Right >= 5)
@@ -19,6 +20,7 @@ int GetLian5(int BoardPosition[][BOARDSIZE], int Flag, Position Coord,int Bans)
 	//横轴方向
 	for (Left = 0, j = Coord.Y - 1; j >= 0&&BoardPosition[Coord.X][j] == Flag; Left++, j--);
 	for (Right = 0, j = Coord.Y + 1; j <BOARDSIZE&&BoardPosition[Coord.X][j] == Flag; Right++, j++);
+	//如果落子前有4个子，则落子后为连五；如果落子前有大于或等于5个子，则落子后为长连
 	if (Left + Right == 4)
 		return 1;
 	else if (Left + Right >= 5)
@@ -26,6 +28,7 @@ int GetLian5(int BoardPosition[][BOARDSIZE], int Flag, Position Coord,int Bans)
 	//'\'
 	for (Left = 0, i = Coord.X - 1,j=Coord.Y-1; i >= 0&&j>=0&&BoardPosition[i][j] == Flag; Left++, i--,j--);
 	for (Right = 0, i = Coord.X + 1, j = Coord.Y + 1;i<BOARDSIZE&&j <BOARDSIZE&&BoardPosition[i][j] == Flag; Right++, i++,j++);
+	//如果落子前有4个子，则落子后为连五；如果落子前有大于或等于5个子，则落子后为长连
 	if (Left + Right == 4)
 		return 1;
 	else if (Left + Right >= 5)
@@ -33,6 +36,7 @@ int GetLian5(int BoardPosition[][BOARDSIZE], int Flag, Position Coord,int Bans)
 	//'/'
 	for (Left = 0, i = Coord.X + 1, j = Coord.Y - 1; i<BOARDSIZE && j >= 0 && BoardPosition[i][j] == Flag; Left++, i++, j--);
 	for (Right = 0, i = Coord.X - 1, j = Coord.Y + 1; i >= 0&&j <BOARDSIZE&&BoardPosition[i][j] == Flag; Right++, i--, j++);
+	//如果落子前有4个子，则落子后为连五；如果落子前有大于或等于5个子，则落子后为长连
 	if (Left + Right == 4)
 		return 1;
 	else if (Left + Right >= 5)
@@ -48,10 +52,10 @@ int GetHuo4(int BoardPosition[][BOARDSIZE], int Flag, Position Coord,int Bans)
 	//纵轴方向
 	for (Left = 0, i = Coord.X - 1; i >= 0 && BoardPosition[i][Coord.Y] == Flag; Left++, i--);
 	for (Right = 0, i = Coord.X + 1; i <BOARDSIZE&&BoardPosition[i][Coord.Y] == Flag; Right++, i++);
-	if (Left+Right==3)
-	{
+	if (Left+Right==3)  //落子前，连子为3
+	{		//两边都没有对方的子挡住
 		if (BoardPosition[Coord.X - Left - 1][Coord.Y] == BLANK&&BoardPosition[Coord.X + Right + 1][Coord.Y] == BLANK
-			//考虑禁手情况
+			//考虑长连禁手情况
 			&& (!(Flag==BLACK&&Bans && (BoardPosition[Coord.X - Left - 2][Coord.Y] == Flag || BoardPosition[Coord.X + Right + 2][Coord.Y] == Flag))))
 			Huo4++;
 	}
@@ -59,10 +63,10 @@ int GetHuo4(int BoardPosition[][BOARDSIZE], int Flag, Position Coord,int Bans)
 	//横轴方向
 	for (Left = 0, j = Coord.Y - 1; j >= 0 && BoardPosition[Coord.X][j] == Flag; Left++, j--);
 	for (Right = 0, j = Coord.Y + 1; j <BOARDSIZE&&BoardPosition[Coord.X][j] == Flag; Right++, j++);
-	if (Left + Right == 3)
-	{
+	if (Left + Right == 3)  //落子前，连子为3
+	{		//两边都没有对方的子挡住
 		if (BoardPosition[Coord.X][Coord.Y - Left - 1] == BLANK&&BoardPosition[Coord.X][Coord.Y + Right + 1] == BLANK
-			//考虑禁手情况
+			//考虑长连禁手情况
 			&& (!(Flag==BLACK&&Bans && (BoardPosition[Coord.X][Coord.Y - Left - 2] == Flag || BoardPosition[Coord.X][Coord.Y + Right + 2] == Flag))))
 			Huo4++;
 	}
@@ -70,10 +74,10 @@ int GetHuo4(int BoardPosition[][BOARDSIZE], int Flag, Position Coord,int Bans)
 	//'\'
 	for (Left = 0, i = Coord.X - 1, j = Coord.Y - 1; i >= 0 && j >= 0 && BoardPosition[i][j] == Flag; Left++, i--, j--);
 	for (Right = 0, i = Coord.X + 1, j = Coord.Y + 1; i<BOARDSIZE&&j <BOARDSIZE&&BoardPosition[i][j] == Flag; Right++, i++, j++);
-	if (Left + Right == 3)
-	{
+	if (Left + Right == 3)  //落子前，连子为3
+	{		//两边都没有对方的子挡住
 		if (BoardPosition[Coord.X-Left-1][Coord.Y - Left - 1] == BLANK&&BoardPosition[Coord.X + Right + 1][Coord.Y + Right + 1] == BLANK
-			//考虑禁手情况
+			//考虑长连禁手情况
 			&& (!(Flag==BLACK&&Bans && (BoardPosition[Coord.X - Left - 2][Coord.Y - Left - 2] == Flag || BoardPosition[Coord.X + Right + 2][Coord.Y + Right + 2] == Flag))))
 			Huo4++;
 	}
@@ -81,10 +85,10 @@ int GetHuo4(int BoardPosition[][BOARDSIZE], int Flag, Position Coord,int Bans)
 	//'/'
 	for (Left = 0, i = Coord.X + 1, j = Coord.Y - 1; i<BOARDSIZE && j >= 0 && BoardPosition[i][j] == Flag; Left++, i++, j--);
 	for (Right = 0, i = Coord.X - 1, j = Coord.Y + 1; i >= 0 && j <BOARDSIZE&&BoardPosition[i][j] == Flag; Right++, i--, j++);
-	if (Left + Right == 3)
-	{
+	if (Left + Right == 3)  //落子前，连子为3
+	{		//两边都没有对方的子挡住
 		if (BoardPosition[Coord.X + Left + 1][Coord.Y - Left - 1] == BLANK&&BoardPosition[Coord.X - Right - 1][Coord.Y + Right + 1] == BLANK
-			//考虑禁手情况
+			//考虑长连禁手情况
 			&& (!(Flag==BLACK&&Bans && (BoardPosition[Coord.X + Left + 2][Coord.Y - Left - 2] == Flag || BoardPosition[Coord.X - Right - 2][Coord.Y + Right + 2] == Flag))))
 			Huo4++;
 	}
@@ -465,7 +469,7 @@ Tiao2Tiao3 GetTiao2Tiao3(int BoardPosition[][BOARDSIZE], int Flag, Position Coor
 	return ChessNum1;
 
 }
-//小棋型函数，用于搜索除以上大棋型以外的棋型，包括冲一、活一、冲二
+//小棋型函数，用于搜索除以上大棋型以外的棋型，包括冲一、活一、冲二（其中冲一、冲二函数判断有问题，由于影响棋局能力小，不予修改）
 XiaoQiXing GetXiaoQiXing(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, int Bans)
 {
 	XiaoQiXing ChessNum0;//定义返回值
@@ -649,12 +653,12 @@ int IfBans(int BoardPosition[][BOARDSIZE],int Flag, Position Coord,int Bans)
 
 }
 //评分函数，给当前位置评分
-int GetScore(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, int Bans)
+int GetScore(int BoardPosition[][BOARDSIZE], int Flag,int CurrentFlag ,Position Coord, int Bans)
 {
 	int Score=10;
 	if (Bans&&Flag == BLACK&&IfBans(BoardPosition, Flag, Coord, Bans))
 		return -1;
-	if (Flag==-ChessFlag)//己方的分数评估
+	if (Flag==CurrentFlag)//己方的分数评估
 	{
 		GetBoardType(BoardPosition, Flag, Coord, Bans);
 		//下面给可以赢的棋型赋值
@@ -736,74 +740,316 @@ int GetScore(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, int Bans)
 	}
 	return Score;
 }
-
-Position AIDraw(int BoardPosition[][BOARDSIZE], int Flag)
+//得到AI的分数
+Position GetBestPosition(int BoardPosition[][BOARDSIZE], int Flag,int *ThreatLevel)
 {
-	Position AiRecommendation;
 	Position Buff;
-	int BoardValue[BOARDSIZE][BOARDSIZE];
+	int AIValue[BOARDSIZE][BOARDSIZE] = { 0 };
+	int HumanValue[BOARDSIZE][BOARDSIZE] = {0};
+	int Value[BOARDSIZE][BOARDSIZE] = {
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+		{ 0,1,1,1,1,1,1,1,1,1,1,1,1,1,0 },
+		{ 0,1,2,2,2,2,2,2,2,2,2,2,2,1,0 },
+		{ 0,1,2,3,3,3,3,3,3,3,3,3,2,1,0 },
+		{ 0,1,2,3,4,4,4,4,4,4,4,3,2,1,0 },
+		{ 0,1,2,3,4,5,5,5,5,5,4,3,2,1,0 },
+		{ 0,1,2,3,4,5,6,6,6,5,4,3,2,1,0 },
+		{ 0,1,2,3,4,5,6,7,6,5,4,3,2,1,0 },
+		{ 0,1,2,3,4,5,6,6,6,5,4,3,2,1,0 },
+		{ 0,1,2,3,4,5,5,5,5,5,4,3,2,1,0 },
+		{ 0,1,2,3,4,4,4,4,4,4,4,3,2,1,0 },
+		{ 0,1,2,3,3,3,3,3,3,3,3,3,2,1,0 },
+		{ 0,1,2,2,2,2,2,2,2,2,2,2,2,1,0 },
+		{ 0,1,1,1,1,1,1,1,1,1,1,1,1,1,0 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+	};
+	int AIFlag = -ChessFlag;
+	int HumanFlag = ChessFlag;
+	int AIThreatLevel=0;// AI落子的威胁性，有四个等级0，1,2,3
+	int HumanThreatLevel=0;// 人落子的威胁性，有四个等级0,1,2,3
+    //取最大价值点,以及最大人的分值、AI的分值
+	Position Temp;
+	Temp.X = 0;
+	Temp.Y = 0;
+	Position AITemp;
+	AITemp.X = 0;
+	AITemp.Y = 0;
+	Position HumanTemp;
+	HumanTemp.X = 0;
+	HumanTemp.Y = 0;
+	int MaxHumanValue = 0;
+	int MaxAIValue = 0;
 
-#ifdef DEBUG
-	int test=0;
+	//对于人来说
+	if (Flag==ChessFlag)
+	{
+		for (Buff.X = 0; Buff.X < BOARDSIZE; Buff.X++)
+		{
+			for (Buff.Y = 0; Buff.Y < BOARDSIZE; Buff.Y++)
+			{
+				//棋盘分数赋值部分
+				if (BoardPosition[Buff.X][Buff.Y] == BLANK) 
+				{
+					HumanValue[Buff.X][Buff.Y] = GetScore(BoardPosition, Flag, HumanFlag, Buff, Bans);
+					AIValue[Buff.X][Buff.Y] = GetScore(BoardPosition, -Flag, HumanFlag, Buff, Bans);
+					Value[Buff.X][Buff.Y] = HumanValue[Buff.X][Buff.Y] + AIValue[Buff.X][Buff.Y];
+				}
+				else
+					Value[Buff.X][Buff.Y] = 0;
+				//取最大值，以及最大值对应的点
+				if (HumanValue[Buff.X][Buff.Y] > MaxHumanValue)
+				{
+					MaxHumanValue = HumanValue[Buff.X][Buff.Y];
+					HumanTemp = Buff;
+				}
+				if (AIValue[Buff.X][Buff.Y] > MaxAIValue)
+				{
+					MaxAIValue = AIValue[Buff.X][Buff.Y];
+					AITemp = Buff;
+				}
+				if (Value[Buff.X][Buff.Y]>Value[Temp.X][Temp.Y])
+					Temp = Buff;
+			}
+		}
+
+		if (MaxAIValue >= 1000000)
+			AIThreatLevel = 3;
+		else if (MaxAIValue >= 40000)
+			AIThreatLevel = 2;
+		else if (MaxAIValue >= 1900)
+			AIThreatLevel = 1;
+
+		if (MaxHumanValue >= 5000000)
+			HumanThreatLevel = 3;
+		else if (MaxHumanValue >= 200000)
+			HumanThreatLevel = 2;
+		else if (MaxHumanValue >= 8000)
+			HumanThreatLevel = 1;
+
+		if (HumanThreatLevel == 3 || AIThreatLevel == 3)
+			*ThreatLevel = 3;
+		else if (HumanThreatLevel == 2 || AIThreatLevel == 2)
+			*ThreatLevel = 2;
+		else if (HumanThreatLevel == 1 || AIThreatLevel == 1)
+			*ThreatLevel = 1;
+		//棋盘已满的情况
+		if (MaxHumanValue == 0 && MaxAIValue == 0)
+		{
+			Temp.X = -1;
+			Temp.Y = -1;
+			return Temp;
+		}
+		//有胜点的情况
+		if (*ThreatLevel == 3)
+			return Temp;
+
+		return HumanThreatLevel >= AIThreatLevel ? HumanTemp : AITemp;
+
+	}
+	//对于AI来说
+	else
+	{
+		for (Buff.X = 0; Buff.X < BOARDSIZE; Buff.X++)
+		{
+			for (Buff.Y = 0; Buff.Y < BOARDSIZE; Buff.Y++)
+			{
+				//棋盘分数赋值部分
+				if (BoardPosition[Buff.X][Buff.Y] == BLANK)
+				{
+					AIValue[Buff.X][Buff.Y] = GetScore(BoardPosition, Flag, AIFlag, Buff, Bans);
+					HumanValue[Buff.X][Buff.Y] = GetScore(BoardPosition, -Flag, AIFlag, Buff, Bans);
+					Value[Buff.X][Buff.Y] = HumanValue[Buff.X][Buff.Y] + AIValue[Buff.X][Buff.Y];
+				}
+				else
+					Value[Buff.X][Buff.Y] = 0;
+				//取最大值，以及最大值对应的点
+				if (HumanValue[Buff.X][Buff.Y] > MaxHumanValue)
+				{
+					MaxHumanValue = HumanValue[Buff.X][Buff.Y];
+					HumanTemp = Buff;
+				}
+				if (AIValue[Buff.X][Buff.Y] > MaxAIValue)
+				{
+					MaxAIValue = AIValue[Buff.X][Buff.Y];
+					AITemp = Buff;
+				}
+				if (Value[Buff.X][Buff.Y]>Value[Temp.X][Temp.Y])
+					Temp = Buff;
+			}
+		}
+
+		if (MaxHumanValue >= 1000000)
+			HumanThreatLevel = 3;
+		else if (MaxHumanValue >= 40000)
+			HumanThreatLevel = 2;
+		else if (MaxHumanValue >= 1900)
+			HumanThreatLevel = 1;
+
+		if (MaxAIValue >= 5000000)
+			AIThreatLevel = 3;
+		else if (MaxAIValue >= 200000)
+			AIThreatLevel = 2;
+		else if (MaxAIValue >= 8000)
+			AIThreatLevel = 1;
+
+		if (HumanThreatLevel == 3 || AIThreatLevel == 3)
+			*ThreatLevel = 3;
+		else if (HumanThreatLevel == 2 || AIThreatLevel == 2)
+			*ThreatLevel = 2;
+		else if (HumanThreatLevel == 1 || AIThreatLevel == 1)
+			*ThreatLevel = 1;
+		//棋盘已满的情况
+		if (MaxHumanValue == 0 && MaxAIValue == 0)
+		{
+			Temp.X = -1;
+			Temp.Y = -1;
+			return Temp;
+		}
+		//有胜点的情况
+		if (*ThreatLevel == 3)
+			return Temp;
+
+		return AIThreatLevel >= HumanThreatLevel ? AITemp : HumanTemp;
+
+	}
+}
+//开局布局，必胜开局是花月局和浦月局，必败开局是游星局和彗星局
+int Layout(Position Current,Position *Best)
+{
+	// 只考虑前面三步的情况
+	if (Counter >= 3)
+		return 0;
+
+	if (ChessFlag == WHITE)// 如果计算机先手，则考虑第三手
+	{
+		// 计算机第一手必然在天元，那么紧邻有8种位置，其他位置不考虑。
+		int Random = 0;
+		srand((unsigned)time(NULL));
+		Random = rand() % 2;
+
+		// 花月
+		if ((Current.X == 6 || Current.X == 8) && Current.Y == 7)
+			Best->X = Current.X, Best->Y = (Random ? 6 : 8);
+		else if (Current.X == 7 && (Current.Y == 6 || Current.Y == 8))
+			Best->X = (Random ? 6 : 8), Best->Y = Current.Y;
+
+		// 浦月
+		else if (Current.X == 6 && Current.X == 8)
+			Random ? (Best->X = Best->Y = 8) : (Best->X = Best->Y = 6);
+		else if (6 == Current.X && 6 == Current.Y)
+			Random ? (Best->X = 8, Best->Y = 6) : (Best->X = 6, Best->Y = 8);
+		else if (8 == Current.X && 6 == Current.Y)
+			Random ? (Best->X = Best->Y = 6) : (Best->X = Best->Y = 8);
+		else if (8 == Current.X && 8 == Current.Y)
+			Random ? (Best->X = 8, Best->Y = 6) : (Best->X = 6, Best->Y = 8);
+
+		// 若不是上面两种棋型,则判断白棋的相对位置
+		else
+		{
+			if (Current.X <= 7 && Current.Y <= 7)
+				Best->X = Best->Y = 8;
+			else if (Current.X >= 7 && Current.Y >= 7)
+				Best->X = Best->Y = 6;
+			else if (Current.X >= 7 && Current.Y <= 7)
+				Best->X = 6, Best->Y = 8;
+			else
+				Best->X = 8, Best->Y = 6;
+		}
+	}
+
+	else //计算机执白，只考虑第二手
+	{
+		// 四种情况，随机
+		int Random = 0;
+		srand((unsigned)time(NULL));
+		Random = rand() % 4;
+
+		while (1)
+		{
+			if (Random==0)
+			{
+				if (Current.X - 1 >= 0)
+				{
+					Best->X = Current.X - 1, Best->Y = Current.Y;
+					break;
+				}
+				else
+					Random = 1;
+			}
+			if (Random==1)
+			{
+				if (Current.X + 1 < BOARDSIZE)
+				{
+					Best->X = Current.X + 1, Best->Y = Current.Y;
+					break;
+				}
+				else
+					Random = 2;
+			}
+			if (Random==2)
+			{
+				if (Current.Y - 1 >= 0)
+				{
+					Best->X = Current.X, Best->Y = Current.Y - 1;
+					break;
+				}
+				else
+					Random = 3;
+			}
+			if (Random==3)
+			{
+				if (Current.Y + 1 < BOARDSIZE)
+				{
+					Best->X = Current.X, Best->Y = Current.Y + 1;
+					break;
+				}
+				else
+					Random = 0;
+			}
+		}
+
+	}
+	return 1;
+}
+//限制框，递归时只考虑框内的位置
+void LimitBox(int BoardPosition [][BOARDSIZE])
+{
+	MinTop =  MinLeft =  5;
+	MaxBottom = MaxRight = 9;
 	for (int i = 0; i < BOARDSIZE; i++)
 	{
 		for (int j = 0; j < BOARDSIZE; j++)
 		{
-			if (BoardPosition[i][j]!=BLANK)
+			if (BoardPosition[i][j]!=0)
 			{
-				test++;
+				if (i - 2 < MinTop)
+					MinTop = i - 2;
+				else if(i + 2 > MaxBottom)
+					MaxBottom = i + 2;
+				if (j - 2 < MinLeft)
+					MinLeft = j - 2;
+				else if (j + 2 > MaxRight)
+					MaxRight = j + 2;
 			}
 		}
 	}
-	if (test==0)
-	{
-		AiRecommendation.X = 7;
-		AiRecommendation.Y = 7;
-		return AiRecommendation;
-	}
-#endif // DEBUG
-
-#ifndef DEBUG
-if (Counter==0)
-	{
-		AiRecommendation.X = 7;
-		AiRecommendation.Y = 7;
-		return AiRecommendation;
-	}
-#endif // !DEBUG
-
-
-	for (Buff.X = 0; Buff.X < BOARDSIZE; Buff.X++)
-	{
-		for (Buff.Y = 0; Buff.Y < BOARDSIZE; Buff.Y++)
-		{
-			if (BoardPosition[Buff.X][Buff.Y]==BLANK)
-			{
-				BoardValue[Buff.X][Buff.Y] = GetScore(BoardPosition, Flag, Buff, Bans) + GetScore(BoardPosition, -Flag, Buff, Bans);
-			}
-			else
-			{
-				BoardValue[Buff.X][Buff.Y] = 0;
-			}
-		}
-	}
-	Position Temp;
-	Temp.X = 7;
-	Temp.Y = 7;
-	for (Buff.X = 0; Buff.X < BOARDSIZE; Buff.X++)
-	{
-		for (Buff.Y = 0; Buff.Y < BOARDSIZE; Buff.Y++)
-		{
-			if (BoardValue[Buff.X][Buff.Y] > BoardValue[Temp.X][Temp.Y])
-			{
-				Temp = Buff;
-			}
-		}
-	}
-	AiRecommendation = Temp;
-	return AiRecommendation;
 }
 
+
+
+Position AIDraw(int BoardPosition[][BOARDSIZE], int Flag ,Position Previous)
+{
+	int ThreatLevel = 0;
+	Position AIBest; //AI计算出的最佳落子位置
+
+	if (Layout(Previous,&AIBest))  //设置开局
+		return AIBest;
+
+	
+
+	
+
+}
 #ifdef DEBUG
 #define BOARDSIZE 15
 Position API_Main(int BoardPosition[][BOARDSIZE], int Flag, int CF, int Bs)

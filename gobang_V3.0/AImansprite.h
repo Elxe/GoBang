@@ -20,5 +20,5 @@ Tiao2Tiao3 GetTiao2Tiao3(int BoardPosition[][BOARDSIZE], int Flag, Position Coor
 XiaoQiXing GetXiaoQiXing(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, int Bans);
 
 
-Position AIDraw(int BoardPosition[][BOARDSIZE], int Flag);
+Position AIDraw(int BoardPosition[][BOARDSIZE], int Flag,Position Previous);
 int IfBans(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, int Bans);
