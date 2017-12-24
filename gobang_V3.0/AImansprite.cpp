@@ -745,7 +745,7 @@ int GetScore(int BoardPosition[][BOARDSIZE], int Flag,int CurrentFlag ,Position 
 	return Score;
 }
 //得到该节点的分数
-int GetNodeScore(int BoardPosition[][BOARDSIZE], int Flag, int CurrentFlag, int Bans)
+int GetNodeScore(int BoardPosition[][BOARDSIZE], int Flag,int Bans)
 {
 	Position Temp;
 	Temp.X = 0;
@@ -781,7 +781,7 @@ int GetNodeScore(int BoardPosition[][BOARDSIZE], int Flag, int CurrentFlag, int 
 				//棋盘分数赋值部分
 				if (BoardPosition[Buff.X][Buff.Y] == BLANK)
 				{
-					Value[Buff.X][Buff.Y] += -Value[Buff.X][Buff.Y]-GetScore(BoardPosition, Flag, HumanFlag, Buff, Bans)- GetScore(BoardPosition, -Flag, HumanFlag, Buff, Bans);
+					Value[Buff.X][Buff.Y] = -Value[Buff.X][Buff.Y]-GetScore(BoardPosition, Flag, HumanFlag, Buff, Bans)- GetScore(BoardPosition, -Flag, HumanFlag, Buff, Bans);
 					NodeValue += Value[Buff.X][Buff.Y];
 				}
 				else
@@ -803,7 +803,7 @@ int GetNodeScore(int BoardPosition[][BOARDSIZE], int Flag, int CurrentFlag, int 
 					//棋盘分数赋值部分
 					if (BoardPosition[Buff.X][Buff.Y] == BLANK)
 					{
-						Value[Buff.X][Buff.Y] += -Value[Buff.X][Buff.Y] - GetScore(BoardPosition, Flag, HumanFlag, Buff, Bans) - GetScore(BoardPosition, -Flag, HumanFlag, Buff, Bans);
+						Value[Buff.X][Buff.Y] += GetScore(BoardPosition, Flag, AIFlag, Buff, Bans) + GetScore(BoardPosition, -Flag, AIFlag, Buff, Bans);
 						NodeValue += Value[Buff.X][Buff.Y];
 					}
 					else
@@ -813,20 +813,12 @@ int GetNodeScore(int BoardPosition[][BOARDSIZE], int Flag, int CurrentFlag, int 
 
 			return NodeValue;
 		}
+	}
 }
-Position GetBestPosition(int BoardPosition[][BOARDSIZE], int Flag)
+//递归
+Position GameTree(int BoardPosition[][BOARDSIZE],TreeNode *Tree[][225],NodeImf *Imf,Position Previous,int Flag,int Bans)
 {
-	
-    //取最大价值点,以及最大人的分值、AI的分值
-
-	Position AITemp;
-	AITemp.X = 0;
-	AITemp.Y = 0;
-	Position HumanTemp;
-	HumanTemp.X = 0;
-	HumanTemp.Y = 0;
-
-
+	GetNodeScore(BoardPosition, Flag, Bans);
 }
 //开局布局，必胜开局是花月局和浦月局，必败开局是游星局和彗星局
 int Layout(Position Current,Position *Best)
@@ -961,9 +953,14 @@ void LimitBox(int BoardPosition [][BOARDSIZE])
 Position AIDraw(int BoardPosition[][BOARDSIZE], int Flag ,Position Previous)
 {
 	Position AIBest; //AI计算出的最佳落子位置
+	TreeNode Tree[10][225];  //用于存储节点的信息
+	NodeImf Imf[10];
+	int CDepth=0;
 
 	if (Layout(Previous,&AIBest))  //设置开局
 		return AIBest;
+
+	
 
 	return GetBestPosition(BoardPosition, Flag);
 }
