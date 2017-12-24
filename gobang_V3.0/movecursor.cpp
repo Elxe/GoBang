@@ -48,7 +48,7 @@ int Control(Position* Cursor, int BoardPosition[][BOARDSIZE], int Flag)
 				printf("跳冲四=%d\n", GetChong3Chong4(BoardPosition, Flag, *Cursor, Bans).TiaoChong4);
 				printf("活三=%d\n", GetHuo2Huo3(BoardPosition, Flag, *Cursor, Bans).Huo3);
 				printf("冲三=%d\n", GetChong3Chong4(BoardPosition, Flag, *Cursor, Bans).Chong3);
-				printf("跳冲三=%d\n", GetTiao2Tiao3(BoardPosition, Flag, *Cursor, Bans).Tiao3);
+				printf("跳三=%d\n", GetTiao2Tiao3(BoardPosition, Flag, *Cursor, Bans).Tiao3);
 				printf("活二=%d\n", GetHuo2Huo3(BoardPosition, Flag, *Cursor, Bans).Huo2);
 				printf("跳二=%d\n", GetTiao2Tiao3(BoardPosition, Flag, *Cursor, Bans).Tiao2);
 				printf("冲二=%d\n", GetXiaoQiXing(BoardPosition, Flag, *Cursor, Bans).Chong2);

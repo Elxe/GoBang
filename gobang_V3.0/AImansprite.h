@@ -5,6 +5,7 @@ typedef struct Chong3Chong4 { int Chong3; int Chong4; int TiaoChong4; } Chong3Ch
 typedef struct Huo2Huo3 { int Huo2; int Huo3; }Huo2Huo3;//记录连二、连三
 typedef struct Tiao2Tiao3 { int Tiao2; int Tiao3; }Tiao2Tiao3;//记录跳二、跳三
 typedef struct XiaoQiXing { int Chong2; int Huo1; int Chong1; }XiaoQiXing;//记录冲二、活一、冲一
+typedef struct TreeNode { Position Location; int Socre;  };
 
 //连五函数，用于搜索连五或者长连，连五返回1，长连返回2，无返回0
 int GetLian5(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, int Bans);

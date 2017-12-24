@@ -406,8 +406,8 @@ Tiao2Tiao3 GetTiao2Tiao3(int BoardPosition[][BOARDSIZE], int Flag, Position Coor
 	}//跳活二，二子间有一个空格，且周围空格数为4个
 	if ((Left1+Left2+Right1+Right2==1&& SpaceLeft == 2 && SpaceRight == 2)&&((Left2==1)^(Right2==1)))
 		ChessNum1.Tiao2++;
-	if ((Left1 + Left2 + Right1 + Right2 == 2) && ((Left1 == 1) ^ (Right1 == 1))
-		&& ((Left2 == 1 && SpaceLeft == 2 && SpaceRight >= 1) || (Right2 == 1 && SpaceLeft >= 1 && SpaceRight == 2)))
+	if ((Left1 + Left2 + Right1 + Right2 == 2) //&& ((Left1 == 1) ^ (Right1 == 1))
+		&& ((Left2 && SpaceLeft == 2 && SpaceRight >= 1) || (Right2 && SpaceLeft >= 1 && SpaceRight == 2)))
 		ChessNum1.Tiao3++;
 
 	//横轴方向
@@ -426,8 +426,8 @@ Tiao2Tiao3 GetTiao2Tiao3(int BoardPosition[][BOARDSIZE], int Flag, Position Coor
 	}//跳活二，二子间有一个空格，且周围空格数为4个
 	if ((Left1 + Left2 + Right1 + Right2 == 1 && SpaceLeft == 2 && SpaceRight == 2) && ((Left2 == 1) ^ (Right2 == 1)))
 		ChessNum1.Tiao2++;
-	if ((Left1 + Left2 + Right1 + Right2 == 2) && ((Left1 == 1) ^ (Right1 == 1))
-		&& ((Left2 == 1 && SpaceLeft == 2 && SpaceRight >= 1) || (Right2 == 1 && SpaceLeft >= 1 && SpaceRight == 2)))
+	if ((Left1 + Left2 + Right1 + Right2 == 2) //&& ((Left1 == 1) ^ (Right1 == 1))
+		&& ((Left2  && SpaceLeft == 2 && SpaceRight >= 1) || (Right2  && SpaceLeft >= 1 && SpaceRight == 2)))
 		ChessNum1.Tiao3++;
 
 	//'\'方向
@@ -446,8 +446,8 @@ Tiao2Tiao3 GetTiao2Tiao3(int BoardPosition[][BOARDSIZE], int Flag, Position Coor
 	}//跳活二，二子间有一个空格，且周围空格数为4个
 	if ((Left1 + Left2 + Right1 + Right2 == 1 && SpaceLeft == 2 && SpaceRight == 2) && ((Left2 == 1) ^ (Right2 == 1)))
 		ChessNum1.Tiao2++;
-	if ((Left1 + Left2 + Right1 + Right2 == 2) && ((Left1 == 1) ^ (Right1 == 1))
-		&& ((Left2 == 1 && SpaceLeft == 2 && SpaceRight >= 1) || (Right2 == 1 && SpaceLeft >= 1 && SpaceRight == 2)))
+	if ((Left1 + Left2 + Right1 + Right2 == 2) //&& ((Left1 == 1) ^ (Right1 == 1))
+		&& ((Left2  && SpaceLeft == 2 && SpaceRight >= 1) || (Right2  && SpaceLeft >= 1 && SpaceRight == 2)))
 		ChessNum1.Tiao3++;
 
 	//'/'方向
@@ -466,8 +466,8 @@ Tiao2Tiao3 GetTiao2Tiao3(int BoardPosition[][BOARDSIZE], int Flag, Position Coor
 	}//跳活二，二子间有一个空格，且周围空格数为4个
 	if ((Left1 + Left2 + Right1 + Right2 == 1 && SpaceLeft == 2 && SpaceRight == 2) && ((Left2 == 1) ^ (Right2 == 1)))
 		ChessNum1.Tiao2++;
-	if ((Left1 + Left2 + Right1 + Right2 == 2) && ((Left1 == 1) ^ (Right1 == 1))
-		&& ((Left2 == 1 && SpaceLeft == 2 && SpaceRight >= 1) || (Right2 == 1 && SpaceLeft >= 1 && SpaceRight == 2)))
+	if ((Left1 + Left2 + Right1 + Right2 == 2) //&& ((Left1 == 1) ^ (Right1 == 1))
+		&& ((Left2 && SpaceLeft == 2 && SpaceRight >= 1) || (Right2 && SpaceLeft >= 1 && SpaceRight == 2)))
 		ChessNum1.Tiao3++;
 
 	return ChessNum1;
@@ -837,23 +837,7 @@ Position GetBestPosition(int BoardPosition[][BOARDSIZE], int Flag)
 			ThreatLevel = 2;
 		else if (HumanThreatLevel == 1 || AIThreatLevel == 1)
 			ThreatLevel = 1;
-		//先手情况专注攻击
-		if (ChessFlag==BLACK)
-		{
-			//棋盘已满的情况
-			if (MaxHumanValue == 0 && MaxAIValue == 0)
-			{
-				Temp.X = -1;
-				Temp.Y = -1;
-				return Temp;
-			}
-			//有胜点的情况
-			if (ThreatLevel == 3)
-				return Temp;
 
-			return HumanThreatLevel >= AIThreatLevel ? HumanTemp : AITemp;
-		}
-		else
 			return Temp;
 
 	}
@@ -909,23 +893,7 @@ Position GetBestPosition(int BoardPosition[][BOARDSIZE], int Flag)
 			ThreatLevel = 2;
 		else if (HumanThreatLevel == 1 || AIThreatLevel == 1)
 			ThreatLevel = 1;
-		//先手情况专注攻击
-		if (ChessFlag == WHITE)
-		{
-			//棋盘已满的情况
-			if (MaxHumanValue == 0 && MaxAIValue == 0)
-			{
-				Temp.X = -1;
-				Temp.Y = -1;
-				return Temp;
-			}
-			//有胜点的情况
-			if (ThreatLevel == 3)
-				return Temp;
 
-			return HumanThreatLevel >= AIThreatLevel ? HumanTemp : AITemp;
-		}
-		else
 			return Temp;
 
 	}
