@@ -744,12 +744,13 @@ int GetScore(int BoardPosition[][BOARDSIZE], int Flag,int CurrentFlag ,Position 
 	}
 	return Score;
 }
-//得到AI的分数
-Position GetBestPosition(int BoardPosition[][BOARDSIZE], int Flag)
+//得到该节点的分数
+int GetNodeScore(int BoardPosition[][BOARDSIZE], int Flag, int CurrentFlag, int Bans)
 {
+	Position Temp;
+	Temp.X = 0;
+	Temp.Y = 0;
 	Position Buff;
-	int AIValue[BOARDSIZE][BOARDSIZE] = { 0 };
-	int HumanValue[BOARDSIZE][BOARDSIZE] = {0};
 	int Value[BOARDSIZE][BOARDSIZE] = {
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 		{ 0,1,1,1,1,1,1,1,1,1,1,1,1,1,0 },
@@ -769,80 +770,9 @@ Position GetBestPosition(int BoardPosition[][BOARDSIZE], int Flag)
 	};
 	int AIFlag = -ChessFlag;
 	int HumanFlag = ChessFlag;
-	int AIThreatLevel=0;// AI落子的威胁性，有四个等级0，1,2,3
-	int HumanThreatLevel=0;// 人落子的威胁性，有四个等级0,1,2,3
-	int ThreatLevel;
-    //取最大价值点,以及最大人的分值、AI的分值
-	Position Temp;
-	Temp.X = 0;
-	Temp.Y = 0;
-	Position AITemp;
-	AITemp.X = 0;
-	AITemp.Y = 0;
-	Position HumanTemp;
-	HumanTemp.X = 0;
-	HumanTemp.Y = 0;
-	int MaxHumanValue = 0;
-	int MaxAIValue = 0;
+	int NodeValue = 0;//当前局面总分
 
-	//对于人来说
-	if (Flag==ChessFlag)
-	{
-		for (Buff.X = 0; Buff.X < BOARDSIZE; Buff.X++)
-		{
-			for (Buff.Y = 0; Buff.Y < BOARDSIZE; Buff.Y++)
-			{
-				//棋盘分数赋值部分
-				if (BoardPosition[Buff.X][Buff.Y] == BLANK) 
-				{
-					HumanValue[Buff.X][Buff.Y] = GetScore(BoardPosition, Flag, HumanFlag, Buff, Bans);
-					AIValue[Buff.X][Buff.Y] = GetScore(BoardPosition, -Flag, HumanFlag, Buff, Bans);
-					Value[Buff.X][Buff.Y] += HumanValue[Buff.X][Buff.Y] + AIValue[Buff.X][Buff.Y];
-				}
-				else
-					Value[Buff.X][Buff.Y] = 0;
-				//取最大值，以及最大值对应的点
-				if (HumanValue[Buff.X][Buff.Y] > MaxHumanValue)
-				{
-					MaxHumanValue = HumanValue[Buff.X][Buff.Y];
-					HumanTemp = Buff;
-				}
-				if (AIValue[Buff.X][Buff.Y] > MaxAIValue)
-				{
-					MaxAIValue = AIValue[Buff.X][Buff.Y];
-					AITemp = Buff;
-				}
-				if (Value[Buff.X][Buff.Y]>Value[Temp.X][Temp.Y])
-					Temp = Buff;
-			}
-		}
-
-		if (MaxAIValue >= 1000000)
-			AIThreatLevel = 3;
-		else if (MaxAIValue >= 40000)
-			AIThreatLevel = 2;
-		else if (MaxAIValue >= 1900)
-			AIThreatLevel = 1;
-
-		if (MaxHumanValue >= 5000000)
-			HumanThreatLevel = 3;
-		else if (MaxHumanValue >= 200000)
-			HumanThreatLevel = 2;
-		else if (MaxHumanValue >= 8000)
-			HumanThreatLevel = 1;
-
-		if (HumanThreatLevel == 3 || AIThreatLevel == 3)
-			ThreatLevel = 3;
-		else if (HumanThreatLevel == 2 || AIThreatLevel == 2)
-			ThreatLevel = 2;
-		else if (HumanThreatLevel == 1 || AIThreatLevel == 1)
-			ThreatLevel = 1;
-
-			return Temp;
-
-	}
-	//对于AI来说
-	else
+	if (Flag == ChessFlag)
 	{
 		for (Buff.X = 0; Buff.X < BOARDSIZE; Buff.X++)
 		{
@@ -851,52 +781,52 @@ Position GetBestPosition(int BoardPosition[][BOARDSIZE], int Flag)
 				//棋盘分数赋值部分
 				if (BoardPosition[Buff.X][Buff.Y] == BLANK)
 				{
-					AIValue[Buff.X][Buff.Y] = GetScore(BoardPosition, Flag, AIFlag, Buff, Bans);
-					HumanValue[Buff.X][Buff.Y] = GetScore(BoardPosition, -Flag, AIFlag, Buff, Bans);
-					Value[Buff.X][Buff.Y] += HumanValue[Buff.X][Buff.Y] + AIValue[Buff.X][Buff.Y];
+					Value[Buff.X][Buff.Y] += -Value[Buff.X][Buff.Y]-GetScore(BoardPosition, Flag, HumanFlag, Buff, Bans)- GetScore(BoardPosition, -Flag, HumanFlag, Buff, Bans);
+					NodeValue += Value[Buff.X][Buff.Y];
 				}
 				else
 					Value[Buff.X][Buff.Y] = 0;
-				//取最大值，以及最大值对应的点
-				if (HumanValue[Buff.X][Buff.Y] > MaxHumanValue)
-				{
-					MaxHumanValue = HumanValue[Buff.X][Buff.Y];
-					HumanTemp = Buff;
-				}
-				if (AIValue[Buff.X][Buff.Y] > MaxAIValue)
-				{
-					MaxAIValue = AIValue[Buff.X][Buff.Y];
-					AITemp = Buff;
-				}
-				if (Value[Buff.X][Buff.Y]>Value[Temp.X][Temp.Y])
-					Temp = Buff;
 			}
 		}
 
-		if (MaxHumanValue >= 1000000)
-			HumanThreatLevel = 3;
-		else if (MaxHumanValue >= 40000)
-			HumanThreatLevel = 2;
-		else if (MaxHumanValue >= 1900)
-			HumanThreatLevel = 1;
-
-		if (MaxAIValue >= 5000000)
-			AIThreatLevel = 3;
-		else if (MaxAIValue >= 200000)
-			AIThreatLevel = 2;
-		else if (MaxAIValue >= 8000)
-			AIThreatLevel = 1;
-
-		if (HumanThreatLevel == 3 || AIThreatLevel == 3)
-			ThreatLevel = 3;
-		else if (HumanThreatLevel == 2 || AIThreatLevel == 2)
-			ThreatLevel = 2;
-		else if (HumanThreatLevel == 1 || AIThreatLevel == 1)
-			ThreatLevel = 1;
-
-			return Temp;
-
+		return NodeValue;
 	}
+	//对于AI来说
+	else
+	{
+		if (Flag == ChessFlag)
+		{
+			for (Buff.X = 0; Buff.X < BOARDSIZE; Buff.X++)
+			{
+				for (Buff.Y = 0; Buff.Y < BOARDSIZE; Buff.Y++)
+				{
+					//棋盘分数赋值部分
+					if (BoardPosition[Buff.X][Buff.Y] == BLANK)
+					{
+						Value[Buff.X][Buff.Y] += -Value[Buff.X][Buff.Y] - GetScore(BoardPosition, Flag, HumanFlag, Buff, Bans) - GetScore(BoardPosition, -Flag, HumanFlag, Buff, Bans);
+						NodeValue += Value[Buff.X][Buff.Y];
+					}
+					else
+						Value[Buff.X][Buff.Y] = 0;
+				}
+			}
+
+			return NodeValue;
+		}
+}
+Position GetBestPosition(int BoardPosition[][BOARDSIZE], int Flag)
+{
+	
+    //取最大价值点,以及最大人的分值、AI的分值
+
+	Position AITemp;
+	AITemp.X = 0;
+	AITemp.Y = 0;
+	Position HumanTemp;
+	HumanTemp.X = 0;
+	HumanTemp.Y = 0;
+
+
 }
 //开局布局，必胜开局是花月局和浦月局，必败开局是游星局和彗星局
 int Layout(Position Current,Position *Best)
