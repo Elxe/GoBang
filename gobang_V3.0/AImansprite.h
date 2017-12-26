@@ -1,11 +1,17 @@
 #pragma once
 #include "define.h"
+#define MAX 100000000  //Alpha、Beta的最大值
+#define MIN -100000000  //Alpha、Beta的最小值
+
 
 typedef struct Chong3Chong4 { int Chong3; int Chong4; int TiaoChong4; } Chong3Chong4;//记录冲三、冲四、跳冲四
 typedef struct Huo2Huo3 { int Huo2; int Huo3; }Huo2Huo3;//记录连二、连三
 typedef struct Tiao2Tiao3 { int Tiao2; int Tiao3; }Tiao2Tiao3;//记录跳二、跳三
 typedef struct XiaoQiXing { int Chong2; int Huo1; int Chong1; }XiaoQiXing;//记录冲二、活一、冲一
-typedef struct TreeNode { Position Location; int Socre;  };
+typedef struct TreeNode { Position Location; int Socre;}TreeNode;
+typedef struct NodeBuff { Position Location; int Length; }NodeBuff;
+typedef struct NodeImf { int Alpha=0; int Beta=0; int Tpye=0; }NodeImf;
+
 
 //连五函数，用于搜索连五或者长连，连五返回1，长连返回2，无返回0
 int GetLian5(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, int Bans);
@@ -19,7 +25,10 @@ Huo2Huo3 GetHuo2Huo3(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, i
 Tiao2Tiao3 GetTiao2Tiao3(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, int Bans);
 //小棋型函数，用于搜索除以上大棋型以外的棋型，包括冲一、活一、冲二
 XiaoQiXing GetXiaoQiXing(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, int Bans);
-
-
+//Alpha、Beta剪枝算法
+int GetMinValue(int BoardPosition[][BOARDSIZE], int CDepth, int Flag, int Alpha, int Beta);
+int GetMaxValue(int BoardPosition[][BOARDSIZE], int CDepth, int Flag, int Alpha, int Beta);
+//下棋函数，返回一个坐标
 Position AIDraw(int BoardPosition[][BOARDSIZE], int Flag,Position Previous);
+//禁手函数，判断是否禁手
 int IfBans(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, int Bans);
