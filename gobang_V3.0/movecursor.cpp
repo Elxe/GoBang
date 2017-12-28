@@ -42,6 +42,8 @@ int Control(Position* Cursor, int BoardPosition[][BOARDSIZE], int Flag)
 			MoveCursor(BuffCursor, *Cursor);
 			//调试棋型
 			{
+				printf("MAX个数=%d\n", MaxTotal);
+				printf("MIN个数=%d\n", MinTotal);
 				printf("连五=%d\n", GetLian5(BoardPosition, Flag, *Cursor, Bans));
 				printf("活四=%d\n", GetHuo4(BoardPosition, Flag, *Cursor, Bans));
 				printf("冲四=%d\n", GetChong3Chong4(BoardPosition, Flag, *Cursor, Bans).Chong4);

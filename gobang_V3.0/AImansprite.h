@@ -8,9 +8,10 @@ typedef struct Chong3Chong4 { int Chong3; int Chong4; int TiaoChong4; } Chong3Ch
 typedef struct Huo2Huo3 { int Huo2; int Huo3; }Huo2Huo3;//记录连二、连三
 typedef struct Tiao2Tiao3 { int Tiao2; int Tiao3; }Tiao2Tiao3;//记录跳二、跳三
 typedef struct XiaoQiXing { int Chong2; int Huo1; int Chong1; }XiaoQiXing;//记录冲二、活一、冲一
-typedef struct TreeNode { Position Location; int Socre;}TreeNode;
-typedef struct NodeBuff { Position Location; int Length; }NodeBuff;
+typedef struct TreeNode { Position Location; int Socre=0;}TreeNode;
+typedef struct NodeBuff { Position Location; int Length=0; }NodeBuff;
 typedef struct NodeImf { int Alpha=0; int Beta=0; int Tpye=0; }NodeImf;
+typedef struct Box { int MinLeft = 5; int MaxRight = 9; int MinTop = 5; int MaxBottom=9; }Box;
 
 
 //连五函数，用于搜索连五或者长连，连五返回1，长连返回2，无返回0
@@ -32,3 +33,5 @@ int GetMaxValue(int BoardPosition[][BOARDSIZE], int CDepth, int Flag, int Alpha,
 Position AIDraw(int BoardPosition[][BOARDSIZE], int Flag,Position Previous);
 //禁手函数，判断是否禁手
 int IfBans(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, int Bans);
+//限制框，递归时只考虑框内的位置
+void LimitBox(int BoardPosition[][BOARDSIZE], Box *Limitation);

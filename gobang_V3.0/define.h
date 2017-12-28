@@ -15,3 +15,6 @@ extern int ChessFlag; //先后手
 extern int Bans;  //禁手
 extern int Depth;  //搜索深度
 extern int Mode;
+extern int MaxTotal;
+extern int MinTotal;
+extern int Number;

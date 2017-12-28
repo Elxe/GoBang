@@ -3,8 +3,24 @@
 //#define DEBUG
 
 int ChangLian, Lian5, Huo4, Chong4, TiaoChong4, Huo3, Tiao3, Chong3, Huo2, Tiao2, Chong2, Huo1, Chong1;//各种棋型的赋值
-int MinLeft, MaxRight, MinTop, MaxBottom;
+Position AIBEST;
 
+int CheckIfLian5(int BoardPosition[][BOARDSIZE], int Flag, Position Coord, int Bans)
+{
+	int Num, i, j;
+	if (BoardPosition[Coord.X][Coord.Y]==Flag)
+	{
+		for (Num = 0, i = Coord.X; i < BOARDSIZE&&BoardPosition[i][Coord.Y] == Flag; i++, Num++);
+		if (Num == 5) return 1;
+		for (Num = 0, i = Coord.X; i >=0&&BoardPosition[i][Coord.Y] == Flag; i--, Num++);
+		if (Num == 5) return 1;
+		for (Num = 0, i = Coord.X,j=Coord.Y; i < BOARDSIZE&&j<BOARDSIZE&&BoardPosition[i][j] == Flag; i++,j++, Num++);
+		if (Num == 5) return 1;
+		for (Num = 0, i = Coord.X,j=Coord.Y; i >= 0,j<BOARDSIZE && BoardPosition[i][j] == Flag; i--,j++, Num++);
+		if (Num == 5) return 1;
+	}
+	return 0;
+}
 //连五函数，用于搜索连五或者长连，连五返回1，长连返回2，无返回0
 int GetLian5(int BoardPosition[][BOARDSIZE], int Flag, Position Coord,int Bans)
 {
@@ -747,9 +763,6 @@ int GetScore(int BoardPosition[][BOARDSIZE], int Flag,int CurrentFlag ,Position 
 //得到该节点的分数
 int GetNodeScore(int BoardPosition[][BOARDSIZE], int Flag,int Bans)
 {
-	Position Temp;
-	Temp.X = 0;
-	Temp.Y = 0;
 	Position Buff;
 	int Value[BOARDSIZE][BOARDSIZE] = {
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
@@ -771,17 +784,20 @@ int GetNodeScore(int BoardPosition[][BOARDSIZE], int Flag,int Bans)
 	int AIFlag = -ChessFlag;
 	int HumanFlag = ChessFlag;
 	int NodeValue = 0;//当前局面总分
+	Box Limitation;
+
+	LimitBox(BoardPosition, &Limitation);
 
 	if (Flag == ChessFlag)
 	{
-		for (Buff.X = 0; Buff.X < BOARDSIZE; Buff.X++)
+		for (Buff.X = Limitation.MinTop; Buff.X < Limitation.MaxBottom; Buff.X++)
 		{
-			for (Buff.Y = 0; Buff.Y < BOARDSIZE; Buff.Y++)
+			for (Buff.Y = Limitation.MinLeft; Buff.Y < Limitation.MaxRight; Buff.Y++)
 			{
 				//棋盘分数赋值部分
 				if (BoardPosition[Buff.X][Buff.Y] == BLANK)
 				{
-					Value[Buff.X][Buff.Y] = -Value[Buff.X][Buff.Y]-GetScore(BoardPosition, Flag, HumanFlag, Buff, Bans)+ GetScore(BoardPosition, -Flag, HumanFlag, Buff, Bans);
+					Value[Buff.X][Buff.Y] = -Value[Buff.X][Buff.Y] - GetScore(BoardPosition, Flag, HumanFlag, Buff, Bans) + GetScore(BoardPosition, -Flag, HumanFlag, Buff, Bans);
 					NodeValue += Value[Buff.X][Buff.Y];
 				}
 				else
@@ -794,46 +810,40 @@ int GetNodeScore(int BoardPosition[][BOARDSIZE], int Flag,int Bans)
 	//对于AI来说
 	else
 	{
-		if (Flag == ChessFlag)
+		for (Buff.X = Limitation.MinTop; Buff.X < Limitation.MaxBottom; Buff.X++)
 		{
-			for (Buff.X = 0; Buff.X < BOARDSIZE; Buff.X++)
+			for (Buff.Y = Limitation.MinLeft; Buff.Y < Limitation.MaxRight; Buff.Y++)
 			{
-				for (Buff.Y = 0; Buff.Y < BOARDSIZE; Buff.Y++)
+				//棋盘分数赋值部分
+				if (BoardPosition[Buff.X][Buff.Y] == BLANK)
 				{
-					//棋盘分数赋值部分
-					if (BoardPosition[Buff.X][Buff.Y] == BLANK)
-					{
-						Value[Buff.X][Buff.Y] += GetScore(BoardPosition, Flag, AIFlag, Buff, Bans) - GetScore(BoardPosition, -Flag, AIFlag, Buff, Bans);
-						NodeValue += Value[Buff.X][Buff.Y];
-					}
-					else
-						Value[Buff.X][Buff.Y] = 0;
+					Value[Buff.X][Buff.Y] += GetScore(BoardPosition, Flag, AIFlag, Buff, Bans) - GetScore(BoardPosition, -Flag, AIFlag, Buff, Bans);
+					NodeValue += Value[Buff.X][Buff.Y];
 				}
+				else
+					Value[Buff.X][Buff.Y] = 0;
 			}
-
-			return NodeValue;
 		}
+		return NodeValue;
 	}
 }
 //限制框，递归时只考虑框内的位置
-void LimitBox(int BoardPosition[][BOARDSIZE])
+void LimitBox(int BoardPosition[][BOARDSIZE],Box *Limitation)
 {
-	MinTop = MinLeft = 5;
-	MaxBottom = MaxRight = 9;
 	for (int i = 0; i < BOARDSIZE; i++)
 	{
 		for (int j = 0; j < BOARDSIZE; j++)
 		{
-			if (BoardPosition[i][j] != 0)
+			if (BoardPosition[i][j] != BLANK)
 			{
-				if (i - 2 < MinTop)
-					MinTop = i - 2;
-				else if (i + 2 > MaxBottom)
-					MaxBottom = i + 2;
-				if (j - 2 < MinLeft)
-					MinLeft = j - 2;
-				else if (j + 2 > MaxRight)
-					MaxRight = j + 2;
+				if (i - 2 < Limitation->MinTop)
+					Limitation->MinTop = max(i - 2, 0);
+				else if (i + 2 > Limitation->MaxBottom)
+					Limitation->MaxBottom = min(i + 2, BOARDSIZE - 1);
+				if (j - 2 < Limitation->MinLeft)
+					Limitation->MinLeft = max(j-2,0);
+				else if (j + 2 > Limitation->MaxRight)
+					Limitation->MaxRight = min(j+2,BOARDSIZE-1);
 			}
 		}
 	}
@@ -848,23 +858,23 @@ int CheckWin(int Boardposition[][BOARDSIZE], int Flag)
 	{
 		for (Buff.Y = 0; Buff.Y < BOARDSIZE; Buff.Y++)
 		{
-			if (GetLian5(Boardposition, Flag, Buff, Bans) == 1)
+			if (CheckIfLian5(Boardposition, Flag, Buff, Bans))
 				Win = 1;
 		}
 	}
 	return Win;
 }
-//得到该节点的所有子节点
-NodeBuff *GetAllNode(int BoardPosition[][BOARDSIZE])
+//得到该节点的所有子节点,传入一个空的数组
+void GetAllNode(NodeBuff AllBuffNode[], int BoardPosition[][BOARDSIZE],int Flag)
 {
 	Position Buff;
-	NodeBuff *AllBuffNode=new NodeBuff[BOARDSIZE*BOARDSIZE];
 	int i = 0;
+	Box Limitation;
 
-	LimitBox(BoardPosition);
-	for (Buff.X = MinTop; Buff.X < MaxBottom; Buff.X++)
+	LimitBox(BoardPosition,&Limitation);
+	for (Buff.X = Limitation.MinTop; Buff.X < Limitation.MaxBottom; Buff.X++)
 	{
-		for (Buff.Y = MinLeft; Buff.Y < MaxRight; Buff.Y++)
+		for (Buff.Y = Limitation.MinLeft; Buff.Y < Limitation.MaxRight; Buff.Y++)
 		{
 			if (BoardPosition[Buff.X][Buff.Y]==BLANK)
 			{
@@ -873,17 +883,17 @@ NodeBuff *GetAllNode(int BoardPosition[][BOARDSIZE])
 		}
 	}
 	AllBuffNode[0].Length = --i;
-	return AllBuffNode;
 }
 //Alpha剪枝
 int GetMinValue(int BoardPosition[][BOARDSIZE],int CDepth, int Flag,int Alpha,int Beta) 
 {
-	int TempScore = Beta;
+	int TempScore;
 	if (CDepth <= 0 || CheckWin(BoardPosition, Flag))
-		return TempScore;
-
+		return GetNodeScore(BoardPosition,Flag,Bans);
+	MinTotal++;
 	int Best = MAX;
-	NodeBuff *Points = GetAllNode(BoardPosition);
+	NodeBuff Points[BOARDSIZE*BOARDSIZE];
+	GetAllNode(Points, BoardPosition,Flag);
 
 	for (int i = 0; i<Points[0].Length; i++) 
 	{
@@ -893,7 +903,7 @@ int GetMinValue(int BoardPosition[][BOARDSIZE],int CDepth, int Flag,int Alpha,in
 		if (TempScore < Best)
 			Best = TempScore;
 	
-		if (TempScore<=Beta) 
+		if (TempScore<Beta) 
 		{  //Alpha剪枝
 			break;
 		}
@@ -903,14 +913,16 @@ int GetMinValue(int BoardPosition[][BOARDSIZE],int CDepth, int Flag,int Alpha,in
 //Beta剪枝
 int GetMaxValue(int BoardPosition[][BOARDSIZE], int CDepth, int Flag, int Alpha, int Beta)
 {
-
-	int TempScore = Alpha;
+	int TempScore; 
 
 	if (CDepth <= 0 || CheckWin(BoardPosition, Flag))
-		return TempScore;
+		return GetNodeScore(BoardPosition, Flag, Bans);
+	
+	MaxTotal++;
 
 	int Best = MIN;
-	NodeBuff *Points = GetAllNode(BoardPosition);
+	NodeBuff Points[BOARDSIZE*BOARDSIZE];
+	GetAllNode(Points, BoardPosition,Flag);
 
 	for (int i = 0; i<Points[0].Length; i++)
 	{
@@ -918,9 +930,12 @@ int GetMaxValue(int BoardPosition[][BOARDSIZE], int CDepth, int Flag, int Alpha,
 		TempScore = GetMinValue(BoardPosition, CDepth - 1, -Flag, Alpha, Best > Beta ? Best :Beta);
 		BoardPosition[Points[i].Location.X][Points[i].Location.Y] = BLANK;
 		if (TempScore > Best)
+		{
 			Best = TempScore;
-
-		if (TempScore >= Alpha)
+			if (CDepth == Depth)
+				AIBEST = Points[i].Location;
+		}
+		if (TempScore > Alpha)
 		{  //Alpha剪枝
 			break;
 		}
@@ -930,31 +945,36 @@ int GetMaxValue(int BoardPosition[][BOARDSIZE], int CDepth, int Flag, int Alpha,
 //递归
 Position GameTree(int BoardPosition[][BOARDSIZE],/* TreeNode *Tree[][225], NodeImf *Imf[], TreeNode *Previous, int CDepth, */int Flag, int Bans)
 {
-	int Point=0;
-	int TempScore = 0; //用于比较大小的分数
 	TreeNode Root[BOARDSIZE*BOARDSIZE];  //用于储存第一层所有可以落子的位置以及分数
-	Position Buff;
-	int Alpha = MIN;  //默认Alpha为最小值
-	int Beta = MAX;  //默认Beta为最大值
+	int Alpha = MAX;  //默认Alpha为最大值
+	int Beta = MIN;  //默认Beta为最小值
 	int i = 0;
 	TreeNode MaxValue;
-	MaxValue.Socre = 0;  //初始化为0
+	MaxValue.Socre = MIN;  //初始化为最小值
+	Box Limitation;
 
+
+	GetMaxValue(BoardPosition, Depth, Flag, Alpha, Beta);
+	return AIBEST;
+	/*
 	//更新限制框
-	LimitBox(BoardPosition);
+	LimitBox(BoardPosition,&Limitation);
 	//得到当前位置可以落子的所有位置的分数
-	for (Buff.X = MinTop; Buff.X < MaxBottom; Buff.X++)
+	for (Buff.X = Limitation.MinTop; Buff.X < Limitation.MaxBottom; Buff.X++)
 	{
-		for (Buff.Y = MinLeft; Buff.Y < MaxRight; Buff.Y++)
+		for (Buff.Y = Limitation.MinLeft; Buff.Y < Limitation.MaxRight; Buff.Y++)
 		{
-			BoardPosition[Buff.X][Buff.Y] = Flag;  //给棋盘这个位置落子
-			Root[i].Location = Buff;
-			Root[i++].Socre = GetMinValue(BoardPosition, Depth, Flag, Alpha, Beta);  //递归算出分数最大值
-			BoardPosition[Buff.X][Buff.Y] = BLANK;  //恢复
-			if (Root[i-1].Socre>MaxValue.Socre)  //取最大值
+			if (BoardPosition[Buff.X][Buff.Y]==BLANK)
 			{
-				MaxValue.Location = Root[i - 1].Location;
-				MaxValue.Socre = Root[i - 1].Socre;
+				BoardPosition[Buff.X][Buff.Y] = Flag;  //给棋盘这个位置落子
+				Root[i].Location = Buff;
+				Root[i++].Socre = GetMinValue(BoardPosition, Depth, Flag, Alpha, Beta);  //递归算出分数最大值
+				BoardPosition[Buff.X][Buff.Y] = BLANK;  //恢复
+				if (Root[i - 1].Socre>MaxValue.Socre)  //取最大值
+				{
+					MaxValue.Location = Root[i - 1].Location;
+					MaxValue.Socre = Root[i - 1].Socre;
+				}
 			}
 		}
 	}
@@ -1116,12 +1136,14 @@ int Layout(Position Current,Position *Best)
 Position AIDraw(int BoardPosition[][BOARDSIZE], int Flag ,Position Previous)
 {
 	Position AIBest; //AI计算出的最佳落子位置
+	/*
 	TreeNode *Tree[9][225];  //用于存储节点的信息
 	NodeImf *Imf[10];
 	int CDepth=0;
-
+	*/
 	if (Layout(Previous,&AIBest))  //设置开局
 		return AIBest;
+		
 	/*
 	LimitBox(BoardPosition);//更新限制框
 
